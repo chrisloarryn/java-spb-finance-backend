@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: account-transaction-backend
+    app.kubernetes.io/name: account-transaction-backend
+    #app.kubernetes.io/name: account-transaction-backend
+  name: account-transaction-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: account-transaction-backend
+  template:
+    metadata:
+      labels:
+        app: account-transaction-backend
+    spec:
+      containers:
+        - name: account-transaction-backend
+          image: CONFIG_LOCATION-docker.pkg.dev/CONFIG_PROJECT_ID/CONFIG_SERVICE/CONFIG_APP_NAME-CONFIG_ENVIRONMENT:CONFIG_VERSION
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 500m
+            requests:
+              memory: 500Mi
+              cpu: 250m
+          ports:
+            - containerPort: 3000
+            - containerPort: 9229
+          #env:
+          #  - NODE_ENV: 
+          envFrom:
+            - configMapRef:
+                name: env-account-transaction-backend
+          volumeMounts:
+            - name: env-account-transaction-backend-volume
+              mountPath: /usr/app/properties.env
+              subPath: properties.env
+      volumes:
+        - name: env-account-transaction-backend-volume
+          configMap:
+            name: env-account-transaction-backend

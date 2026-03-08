@@ -11,12 +11,12 @@ services:
       - "65432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-      - ./BD_SCRIPTS:/docker-entrypoint-initdb.d
+      - ./DB_SCRIPTS:/docker-entrypoint-initdb.d
 
 
-  cliente-persona:
+  client-person:
     build:
-      context: ./cliente-persona
+      context: ./client-person
       dockerfile: Dockerfile
     restart: always
     ports:
@@ -28,16 +28,16 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       
-  cuenta-movimiento:
+  account-transaction:
     build:
-      context: ./cuenta-movimiento
+      context: ./account-transaction
       dockerfile: Dockerfile
     restart: always
     ports:
       - "1204:1204"
     depends_on:
       - postgres
-      - cliente-persona
+      - client-person
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres

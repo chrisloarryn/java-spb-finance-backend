@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  cliente-persona-unit-tests:
+  client-person-unit-tests:
     runs-on: ubuntu-latest
     outputs:
       tests_run: ${{ steps.publish-summary.outputs.tests_run }}
@@ -39,10 +39,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cliente-persona unit and integration tests excluding Karate
+      - name: Run client-person unit and integration tests excluding Karate
         id: run-tests
         continue-on-error: true
-        working-directory: cliente-persona
+        working-directory: client-person
         shell: bash
         run: |
           mkdir -p target
@@ -51,33 +51,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cliente-persona unit summary
+      - name: Publish client-person unit summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py unit \
-            --module-label "cliente-persona" \
-            --reports-dir cliente-persona/target/surefire-reports \
+            --module-label "client-person" \
+            --reports-dir client-person/target/surefire-reports \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cliente-persona unit test reports
+      - name: Upload client-person unit test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cliente-persona-unit-test-report
+          name: client-person-unit-test-report
           path: |
-            cliente-persona/target/surefire-reports
-            cliente-persona/target/unit-tests.log
+            client-person/target/surefire-reports
+            client-person/target/unit-tests.log
           if-no-files-found: ignore
 
-      - name: Fail if cliente-persona unit tests failed
+      - name: Fail if client-person unit tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cliente-persona-karate-contract-tests:
+  client-person-karate-contract-tests:
     runs-on: ubuntu-latest
-    needs: cliente-persona-unit-tests
+    needs: client-person-unit-tests
     outputs:
       features_total: ${{ steps.publish-summary.outputs.features_total }}
       features_passed: ${{ steps.publish-summary.outputs.features_passed }}
@@ -97,10 +97,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cliente-persona Karate contract tests
+      - name: Run client-person Karate contract tests
         id: run-tests
         continue-on-error: true
-        working-directory: cliente-persona
+        working-directory: client-person
         shell: bash
         run: |
           mkdir -p target
@@ -109,33 +109,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cliente-persona Karate summary
+      - name: Publish client-person Karate summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py karate \
-            --module-label "cliente-persona" \
-            --summary-json cliente-persona/target/karate-reports/karate-summary-json.txt \
+            --module-label "client-person" \
+            --summary-json client-person/target/karate-reports/karate-summary-json.txt \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cliente-persona Karate report
+      - name: Upload client-person Karate report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cliente-persona-karate-report
+          name: client-person-karate-report
           path: |
-            cliente-persona/target/karate-reports
-            cliente-persona/target/karate-console.log
+            client-person/target/karate-reports
+            client-person/target/karate-console.log
           if-no-files-found: ignore
 
-      - name: Fail if cliente-persona Karate tests failed
+      - name: Fail if client-person Karate tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cliente-persona-gatling-performance-tests:
+  client-person-gatling-performance-tests:
     runs-on: ubuntu-latest
-    needs: cliente-persona-unit-tests
+    needs: client-person-unit-tests
     outputs:
       requests_total: ${{ steps.publish-summary.outputs.requests_total }}
       requests_ok: ${{ steps.publish-summary.outputs.requests_ok }}
@@ -158,10 +158,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cliente-persona Gatling performance tests
+      - name: Run client-person Gatling performance tests
         id: run-tests
         continue-on-error: true
-        working-directory: cliente-persona
+        working-directory: client-person
         shell: bash
         run: |
           mkdir -p target
@@ -170,33 +170,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cliente-persona Gatling summary
+      - name: Publish client-person Gatling summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py gatling \
-            --module-label "cliente-persona" \
-            --console-log cliente-persona/target/gatling-console.log \
+            --module-label "client-person" \
+            --console-log client-person/target/gatling-console.log \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cliente-persona Gatling report
+      - name: Upload client-person Gatling report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cliente-persona-gatling-report
+          name: client-person-gatling-report
           path: |
-            cliente-persona/target/gatling
-            cliente-persona/target/gatling-console.log
+            client-person/target/gatling
+            client-person/target/gatling-console.log
           if-no-files-found: ignore
 
-      - name: Fail if cliente-persona Gatling tests failed
+      - name: Fail if client-person Gatling tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cliente-persona-coverage-quality-gate:
+  client-person-coverage-quality-gate:
     runs-on: ubuntu-latest
-    needs: cliente-persona-unit-tests
+    needs: client-person-unit-tests
     outputs:
       line_coverage_pct: ${{ steps.publish-summary.outputs.line_coverage_pct }}
       covered_lines: ${{ steps.publish-summary.outputs.covered_lines }}
@@ -213,10 +213,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cliente-persona coverage quality gate
+      - name: Run client-person coverage quality gate
         id: run-tests
         continue-on-error: true
-        working-directory: cliente-persona
+        working-directory: client-person
         shell: bash
         run: |
           mkdir -p target
@@ -225,32 +225,32 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cliente-persona coverage summary
+      - name: Publish client-person coverage summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py coverage \
-            --module-label "cliente-persona" \
-            --report-xml cliente-persona/target/site/jacoco/jacoco.xml \
+            --module-label "client-person" \
+            --report-xml client-person/target/site/jacoco/jacoco.xml \
             --minimum-ratio 0.90 \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cliente-persona coverage report
+      - name: Upload client-person coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cliente-persona-coverage-report
+          name: client-person-coverage-report
           path: |
-            cliente-persona/target/site/jacoco
-            cliente-persona/target/coverage.log
+            client-person/target/site/jacoco
+            client-person/target/coverage.log
           if-no-files-found: ignore
 
-      - name: Fail if cliente-persona coverage gate failed
+      - name: Fail if client-person coverage gate failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cuenta-movimiento-unit-tests:
+  account-transaction-unit-tests:
     runs-on: ubuntu-latest
     outputs:
       tests_run: ${{ steps.publish-summary.outputs.tests_run }}
@@ -275,10 +275,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cuenta-movimiento unit and integration tests excluding Karate
+      - name: Run account-transaction unit and integration tests excluding Karate
         id: run-tests
         continue-on-error: true
-        working-directory: cuenta-movimiento
+        working-directory: account-transaction
         shell: bash
         run: |
           mkdir -p target
@@ -287,33 +287,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cuenta-movimiento unit summary
+      - name: Publish account-transaction unit summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py unit \
-            --module-label "cuenta-movimiento" \
-            --reports-dir cuenta-movimiento/target/surefire-reports \
+            --module-label "account-transaction" \
+            --reports-dir account-transaction/target/surefire-reports \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cuenta-movimiento unit test reports
+      - name: Upload account-transaction unit test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cuenta-movimiento-unit-test-report
+          name: account-transaction-unit-test-report
           path: |
-            cuenta-movimiento/target/surefire-reports
-            cuenta-movimiento/target/unit-tests.log
+            account-transaction/target/surefire-reports
+            account-transaction/target/unit-tests.log
           if-no-files-found: ignore
 
-      - name: Fail if cuenta-movimiento unit tests failed
+      - name: Fail if account-transaction unit tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cuenta-movimiento-karate-contract-tests:
+  account-transaction-karate-contract-tests:
     runs-on: ubuntu-latest
-    needs: cuenta-movimiento-unit-tests
+    needs: account-transaction-unit-tests
     outputs:
       features_total: ${{ steps.publish-summary.outputs.features_total }}
       features_passed: ${{ steps.publish-summary.outputs.features_passed }}
@@ -333,10 +333,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cuenta-movimiento Karate contract tests
+      - name: Run account-transaction Karate contract tests
         id: run-tests
         continue-on-error: true
-        working-directory: cuenta-movimiento
+        working-directory: account-transaction
         shell: bash
         run: |
           mkdir -p target
@@ -345,33 +345,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cuenta-movimiento Karate summary
+      - name: Publish account-transaction Karate summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py karate \
-            --module-label "cuenta-movimiento" \
-            --summary-json cuenta-movimiento/target/karate-reports/karate-summary-json.txt \
+            --module-label "account-transaction" \
+            --summary-json account-transaction/target/karate-reports/karate-summary-json.txt \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cuenta-movimiento Karate report
+      - name: Upload account-transaction Karate report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cuenta-movimiento-karate-report
+          name: account-transaction-karate-report
           path: |
-            cuenta-movimiento/target/karate-reports
-            cuenta-movimiento/target/karate-console.log
+            account-transaction/target/karate-reports
+            account-transaction/target/karate-console.log
           if-no-files-found: ignore
 
-      - name: Fail if cuenta-movimiento Karate tests failed
+      - name: Fail if account-transaction Karate tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cuenta-movimiento-gatling-performance-tests:
+  account-transaction-gatling-performance-tests:
     runs-on: ubuntu-latest
-    needs: cuenta-movimiento-unit-tests
+    needs: account-transaction-unit-tests
     outputs:
       requests_total: ${{ steps.publish-summary.outputs.requests_total }}
       requests_ok: ${{ steps.publish-summary.outputs.requests_ok }}
@@ -394,10 +394,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cuenta-movimiento Gatling performance tests
+      - name: Run account-transaction Gatling performance tests
         id: run-tests
         continue-on-error: true
-        working-directory: cuenta-movimiento
+        working-directory: account-transaction
         shell: bash
         run: |
           mkdir -p target
@@ -406,33 +406,33 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cuenta-movimiento Gatling summary
+      - name: Publish account-transaction Gatling summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py gatling \
-            --module-label "cuenta-movimiento" \
-            --console-log cuenta-movimiento/target/gatling-console.log \
+            --module-label "account-transaction" \
+            --console-log account-transaction/target/gatling-console.log \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cuenta-movimiento Gatling report
+      - name: Upload account-transaction Gatling report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cuenta-movimiento-gatling-report
+          name: account-transaction-gatling-report
           path: |
-            cuenta-movimiento/target/gatling
-            cuenta-movimiento/target/gatling-console.log
+            account-transaction/target/gatling
+            account-transaction/target/gatling-console.log
           if-no-files-found: ignore
 
-      - name: Fail if cuenta-movimiento Gatling tests failed
+      - name: Fail if account-transaction Gatling tests failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
-  cuenta-movimiento-coverage-quality-gate:
+  account-transaction-coverage-quality-gate:
     runs-on: ubuntu-latest
-    needs: cuenta-movimiento-unit-tests
+    needs: account-transaction-unit-tests
     outputs:
       line_coverage_pct: ${{ steps.publish-summary.outputs.line_coverage_pct }}
       covered_lines: ${{ steps.publish-summary.outputs.covered_lines }}
@@ -449,10 +449,10 @@ jobs:
           java-version: "25"
           cache: maven
 
-      - name: Run cuenta-movimiento coverage quality gate
+      - name: Run account-transaction coverage quality gate
         id: run-tests
         continue-on-error: true
-        working-directory: cuenta-movimiento
+        working-directory: account-transaction
         shell: bash
         run: |
           mkdir -p target
@@ -461,28 +461,28 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
 
-      - name: Publish cuenta-movimiento coverage summary
+      - name: Publish account-transaction coverage summary
         id: publish-summary
         if: always()
         run: |
           python3 .github/scripts/publish_validation_summary.py coverage \
-            --module-label "cuenta-movimiento" \
-            --report-xml cuenta-movimiento/target/site/jacoco/jacoco.xml \
+            --module-label "account-transaction" \
+            --report-xml account-transaction/target/site/jacoco/jacoco.xml \
             --minimum-ratio 0.90 \
             --summary-file "$GITHUB_STEP_SUMMARY" \
             --output-file "$GITHUB_OUTPUT"
 
-      - name: Upload cuenta-movimiento coverage report
+      - name: Upload account-transaction coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cuenta-movimiento-coverage-report
+          name: account-transaction-coverage-report
           path: |
-            cuenta-movimiento/target/site/jacoco
-            cuenta-movimiento/target/coverage.log
+            account-transaction/target/site/jacoco
+            account-transaction/target/coverage.log
           if-no-files-found: ignore
 
-      - name: Fail if cuenta-movimiento coverage gate failed
+      - name: Fail if account-transaction coverage gate failed
         if: always() && steps.run-tests.outputs.exit_code != '0'
         run: exit 1
 
@@ -490,71 +490,71 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     needs:
-      - cliente-persona-unit-tests
-      - cliente-persona-karate-contract-tests
-      - cliente-persona-gatling-performance-tests
-      - cliente-persona-coverage-quality-gate
-      - cuenta-movimiento-unit-tests
-      - cuenta-movimiento-karate-contract-tests
-      - cuenta-movimiento-gatling-performance-tests
-      - cuenta-movimiento-coverage-quality-gate
+      - client-person-unit-tests
+      - client-person-karate-contract-tests
+      - client-person-gatling-performance-tests
+      - client-person-coverage-quality-gate
+      - account-transaction-unit-tests
+      - account-transaction-karate-contract-tests
+      - account-transaction-gatling-performance-tests
+      - account-transaction-coverage-quality-gate
     steps:
       - name: Publish workflow summary
         env:
-          CLIENTE_PERSONA_UNIT_RESULT: ${{ needs.cliente-persona-unit-tests.result }}
-          CLIENTE_PERSONA_UNIT_TESTS_RUN: ${{ needs.cliente-persona-unit-tests.outputs.tests_run }}
-          CLIENTE_PERSONA_UNIT_FAILURES: ${{ needs.cliente-persona-unit-tests.outputs.failures }}
-          CLIENTE_PERSONA_UNIT_ERRORS: ${{ needs.cliente-persona-unit-tests.outputs.errors }}
-          CLIENTE_PERSONA_UNIT_SKIPPED: ${{ needs.cliente-persona-unit-tests.outputs.skipped }}
-          CLIENTE_PERSONA_UNIT_SERVICE_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.service_tests }}
-          CLIENTE_PERSONA_UNIT_SECURITY_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.security_tests }}
-          CLIENTE_PERSONA_UNIT_REPOSITORY_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.repository_tests }}
-          CLIENTE_PERSONA_UNIT_INTEGRATION_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.integration_tests }}
-          CLIENTE_PERSONA_UNIT_ERROR_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.error_tests }}
-          CLIENTE_PERSONA_UNIT_OTHER_TESTS: ${{ needs.cliente-persona-unit-tests.outputs.other_tests }}
-          CLIENTE_PERSONA_KARATE_RESULT: ${{ needs.cliente-persona-karate-contract-tests.result }}
-          CLIENTE_PERSONA_KARATE_FEATURES: ${{ needs.cliente-persona-karate-contract-tests.outputs.features_total }}
-          CLIENTE_PERSONA_KARATE_SCENARIOS: ${{ needs.cliente-persona-karate-contract-tests.outputs.scenarios_total }}
-          CLIENTE_PERSONA_KARATE_FAILED: ${{ needs.cliente-persona-karate-contract-tests.outputs.scenarios_failed }}
-          CLIENTE_PERSONA_GATLING_RESULT: ${{ needs.cliente-persona-gatling-performance-tests.result }}
-          CLIENTE_PERSONA_GATLING_REQUESTS: ${{ needs.cliente-persona-gatling-performance-tests.outputs.requests_total }}
-          CLIENTE_PERSONA_GATLING_KO: ${{ needs.cliente-persona-gatling-performance-tests.outputs.requests_ko }}
-          CLIENTE_PERSONA_GATLING_P95: ${{ needs.cliente-persona-gatling-performance-tests.outputs.p95_ms }}
-          CLIENTE_PERSONA_GATLING_P99: ${{ needs.cliente-persona-gatling-performance-tests.outputs.p99_ms }}
-          CLIENTE_PERSONA_GATLING_THROUGHPUT: ${{ needs.cliente-persona-gatling-performance-tests.outputs.throughput_rps }}
-          CLIENTE_PERSONA_GATLING_ASSERTIONS_FAILED: ${{ needs.cliente-persona-gatling-performance-tests.outputs.assertions_failed }}
-          CLIENTE_PERSONA_COVERAGE_RESULT: ${{ needs.cliente-persona-coverage-quality-gate.result }}
-          CLIENTE_PERSONA_COVERAGE_PCT: ${{ needs.cliente-persona-coverage-quality-gate.outputs.line_coverage_pct }}
-          CLIENTE_PERSONA_COVERAGE_THRESHOLD_PCT: ${{ needs.cliente-persona-coverage-quality-gate.outputs.coverage_threshold_pct }}
-          CLIENTE_PERSONA_COVERAGE_COVERED_LINES: ${{ needs.cliente-persona-coverage-quality-gate.outputs.covered_lines }}
-          CLIENTE_PERSONA_COVERAGE_MISSED_LINES: ${{ needs.cliente-persona-coverage-quality-gate.outputs.missed_lines }}
-          CUENTA_MOVIMIENTO_UNIT_RESULT: ${{ needs.cuenta-movimiento-unit-tests.result }}
-          CUENTA_MOVIMIENTO_UNIT_TESTS_RUN: ${{ needs.cuenta-movimiento-unit-tests.outputs.tests_run }}
-          CUENTA_MOVIMIENTO_UNIT_FAILURES: ${{ needs.cuenta-movimiento-unit-tests.outputs.failures }}
-          CUENTA_MOVIMIENTO_UNIT_ERRORS: ${{ needs.cuenta-movimiento-unit-tests.outputs.errors }}
-          CUENTA_MOVIMIENTO_UNIT_SKIPPED: ${{ needs.cuenta-movimiento-unit-tests.outputs.skipped }}
-          CUENTA_MOVIMIENTO_UNIT_SERVICE_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.service_tests }}
-          CUENTA_MOVIMIENTO_UNIT_SECURITY_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.security_tests }}
-          CUENTA_MOVIMIENTO_UNIT_REPOSITORY_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.repository_tests }}
-          CUENTA_MOVIMIENTO_UNIT_INTEGRATION_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.integration_tests }}
-          CUENTA_MOVIMIENTO_UNIT_ERROR_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.error_tests }}
-          CUENTA_MOVIMIENTO_UNIT_OTHER_TESTS: ${{ needs.cuenta-movimiento-unit-tests.outputs.other_tests }}
-          CUENTA_MOVIMIENTO_KARATE_RESULT: ${{ needs.cuenta-movimiento-karate-contract-tests.result }}
-          CUENTA_MOVIMIENTO_KARATE_FEATURES: ${{ needs.cuenta-movimiento-karate-contract-tests.outputs.features_total }}
-          CUENTA_MOVIMIENTO_KARATE_SCENARIOS: ${{ needs.cuenta-movimiento-karate-contract-tests.outputs.scenarios_total }}
-          CUENTA_MOVIMIENTO_KARATE_FAILED: ${{ needs.cuenta-movimiento-karate-contract-tests.outputs.scenarios_failed }}
-          CUENTA_MOVIMIENTO_GATLING_RESULT: ${{ needs.cuenta-movimiento-gatling-performance-tests.result }}
-          CUENTA_MOVIMIENTO_GATLING_REQUESTS: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.requests_total }}
-          CUENTA_MOVIMIENTO_GATLING_KO: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.requests_ko }}
-          CUENTA_MOVIMIENTO_GATLING_P95: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.p95_ms }}
-          CUENTA_MOVIMIENTO_GATLING_P99: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.p99_ms }}
-          CUENTA_MOVIMIENTO_GATLING_THROUGHPUT: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.throughput_rps }}
-          CUENTA_MOVIMIENTO_GATLING_ASSERTIONS_FAILED: ${{ needs.cuenta-movimiento-gatling-performance-tests.outputs.assertions_failed }}
-          CUENTA_MOVIMIENTO_COVERAGE_RESULT: ${{ needs.cuenta-movimiento-coverage-quality-gate.result }}
-          CUENTA_MOVIMIENTO_COVERAGE_PCT: ${{ needs.cuenta-movimiento-coverage-quality-gate.outputs.line_coverage_pct }}
-          CUENTA_MOVIMIENTO_COVERAGE_THRESHOLD_PCT: ${{ needs.cuenta-movimiento-coverage-quality-gate.outputs.coverage_threshold_pct }}
-          CUENTA_MOVIMIENTO_COVERAGE_COVERED_LINES: ${{ needs.cuenta-movimiento-coverage-quality-gate.outputs.covered_lines }}
-          CUENTA_MOVIMIENTO_COVERAGE_MISSED_LINES: ${{ needs.cuenta-movimiento-coverage-quality-gate.outputs.missed_lines }}
+          CLIENT_PERSON_UNIT_RESULT: ${{ needs.client-person-unit-tests.result }}
+          CLIENT_PERSON_UNIT_TESTS_RUN: ${{ needs.client-person-unit-tests.outputs.tests_run }}
+          CLIENT_PERSON_UNIT_FAILURES: ${{ needs.client-person-unit-tests.outputs.failures }}
+          CLIENT_PERSON_UNIT_ERRORS: ${{ needs.client-person-unit-tests.outputs.errors }}
+          CLIENT_PERSON_UNIT_SKIPPED: ${{ needs.client-person-unit-tests.outputs.skipped }}
+          CLIENT_PERSON_UNIT_SERVICE_TESTS: ${{ needs.client-person-unit-tests.outputs.service_tests }}
+          CLIENT_PERSON_UNIT_SECURITY_TESTS: ${{ needs.client-person-unit-tests.outputs.security_tests }}
+          CLIENT_PERSON_UNIT_REPOSITORY_TESTS: ${{ needs.client-person-unit-tests.outputs.repository_tests }}
+          CLIENT_PERSON_UNIT_INTEGRATION_TESTS: ${{ needs.client-person-unit-tests.outputs.integration_tests }}
+          CLIENT_PERSON_UNIT_ERROR_TESTS: ${{ needs.client-person-unit-tests.outputs.error_tests }}
+          CLIENT_PERSON_UNIT_OTHER_TESTS: ${{ needs.client-person-unit-tests.outputs.other_tests }}
+          CLIENT_PERSON_KARATE_RESULT: ${{ needs.client-person-karate-contract-tests.result }}
+          CLIENT_PERSON_KARATE_FEATURES: ${{ needs.client-person-karate-contract-tests.outputs.features_total }}
+          CLIENT_PERSON_KARATE_SCENARIOS: ${{ needs.client-person-karate-contract-tests.outputs.scenarios_total }}
+          CLIENT_PERSON_KARATE_FAILED: ${{ needs.client-person-karate-contract-tests.outputs.scenarios_failed }}
+          CLIENT_PERSON_GATLING_RESULT: ${{ needs.client-person-gatling-performance-tests.result }}
+          CLIENT_PERSON_GATLING_REQUESTS: ${{ needs.client-person-gatling-performance-tests.outputs.requests_total }}
+          CLIENT_PERSON_GATLING_KO: ${{ needs.client-person-gatling-performance-tests.outputs.requests_ko }}
+          CLIENT_PERSON_GATLING_P95: ${{ needs.client-person-gatling-performance-tests.outputs.p95_ms }}
+          CLIENT_PERSON_GATLING_P99: ${{ needs.client-person-gatling-performance-tests.outputs.p99_ms }}
+          CLIENT_PERSON_GATLING_THROUGHPUT: ${{ needs.client-person-gatling-performance-tests.outputs.throughput_rps }}
+          CLIENT_PERSON_GATLING_ASSERTIONS_FAILED: ${{ needs.client-person-gatling-performance-tests.outputs.assertions_failed }}
+          CLIENT_PERSON_COVERAGE_RESULT: ${{ needs.client-person-coverage-quality-gate.result }}
+          CLIENT_PERSON_COVERAGE_PCT: ${{ needs.client-person-coverage-quality-gate.outputs.line_coverage_pct }}
+          CLIENT_PERSON_COVERAGE_THRESHOLD_PCT: ${{ needs.client-person-coverage-quality-gate.outputs.coverage_threshold_pct }}
+          CLIENT_PERSON_COVERAGE_COVERED_LINES: ${{ needs.client-person-coverage-quality-gate.outputs.covered_lines }}
+          CLIENT_PERSON_COVERAGE_MISSED_LINES: ${{ needs.client-person-coverage-quality-gate.outputs.missed_lines }}
+          ACCOUNT_TRANSACTION_UNIT_RESULT: ${{ needs.account-transaction-unit-tests.result }}
+          ACCOUNT_TRANSACTION_UNIT_TESTS_RUN: ${{ needs.account-transaction-unit-tests.outputs.tests_run }}
+          ACCOUNT_TRANSACTION_UNIT_FAILURES: ${{ needs.account-transaction-unit-tests.outputs.failures }}
+          ACCOUNT_TRANSACTION_UNIT_ERRORS: ${{ needs.account-transaction-unit-tests.outputs.errors }}
+          ACCOUNT_TRANSACTION_UNIT_SKIPPED: ${{ needs.account-transaction-unit-tests.outputs.skipped }}
+          ACCOUNT_TRANSACTION_UNIT_SERVICE_TESTS: ${{ needs.account-transaction-unit-tests.outputs.service_tests }}
+          ACCOUNT_TRANSACTION_UNIT_SECURITY_TESTS: ${{ needs.account-transaction-unit-tests.outputs.security_tests }}
+          ACCOUNT_TRANSACTION_UNIT_REPOSITORY_TESTS: ${{ needs.account-transaction-unit-tests.outputs.repository_tests }}
+          ACCOUNT_TRANSACTION_UNIT_INTEGRATION_TESTS: ${{ needs.account-transaction-unit-tests.outputs.integration_tests }}
+          ACCOUNT_TRANSACTION_UNIT_ERROR_TESTS: ${{ needs.account-transaction-unit-tests.outputs.error_tests }}
+          ACCOUNT_TRANSACTION_UNIT_OTHER_TESTS: ${{ needs.account-transaction-unit-tests.outputs.other_tests }}
+          ACCOUNT_TRANSACTION_KARATE_RESULT: ${{ needs.account-transaction-karate-contract-tests.result }}
+          ACCOUNT_TRANSACTION_KARATE_FEATURES: ${{ needs.account-transaction-karate-contract-tests.outputs.features_total }}
+          ACCOUNT_TRANSACTION_KARATE_SCENARIOS: ${{ needs.account-transaction-karate-contract-tests.outputs.scenarios_total }}
+          ACCOUNT_TRANSACTION_KARATE_FAILED: ${{ needs.account-transaction-karate-contract-tests.outputs.scenarios_failed }}
+          ACCOUNT_TRANSACTION_GATLING_RESULT: ${{ needs.account-transaction-gatling-performance-tests.result }}
+          ACCOUNT_TRANSACTION_GATLING_REQUESTS: ${{ needs.account-transaction-gatling-performance-tests.outputs.requests_total }}
+          ACCOUNT_TRANSACTION_GATLING_KO: ${{ needs.account-transaction-gatling-performance-tests.outputs.requests_ko }}
+          ACCOUNT_TRANSACTION_GATLING_P95: ${{ needs.account-transaction-gatling-performance-tests.outputs.p95_ms }}
+          ACCOUNT_TRANSACTION_GATLING_P99: ${{ needs.account-transaction-gatling-performance-tests.outputs.p99_ms }}
+          ACCOUNT_TRANSACTION_GATLING_THROUGHPUT: ${{ needs.account-transaction-gatling-performance-tests.outputs.throughput_rps }}
+          ACCOUNT_TRANSACTION_GATLING_ASSERTIONS_FAILED: ${{ needs.account-transaction-gatling-performance-tests.outputs.assertions_failed }}
+          ACCOUNT_TRANSACTION_COVERAGE_RESULT: ${{ needs.account-transaction-coverage-quality-gate.result }}
+          ACCOUNT_TRANSACTION_COVERAGE_PCT: ${{ needs.account-transaction-coverage-quality-gate.outputs.line_coverage_pct }}
+          ACCOUNT_TRANSACTION_COVERAGE_THRESHOLD_PCT: ${{ needs.account-transaction-coverage-quality-gate.outputs.coverage_threshold_pct }}
+          ACCOUNT_TRANSACTION_COVERAGE_COVERED_LINES: ${{ needs.account-transaction-coverage-quality-gate.outputs.covered_lines }}
+          ACCOUNT_TRANSACTION_COVERAGE_MISSED_LINES: ${{ needs.account-transaction-coverage-quality-gate.outputs.missed_lines }}
         shell: bash
         run: |
           status_label() {
@@ -572,22 +572,22 @@ jobs:
             echo ""
             echo "| Module | Stage | Result | Highlights |"
             echo "| --- | --- | --- | --- |"
-            echo "| cliente-persona | Unit and integration | $(status_label "${CLIENTE_PERSONA_UNIT_RESULT}") | tests=${CLIENTE_PERSONA_UNIT_TESTS_RUN:-n/a}, failures=${CLIENTE_PERSONA_UNIT_FAILURES:-n/a}, errors=${CLIENTE_PERSONA_UNIT_ERRORS:-n/a}, skipped=${CLIENTE_PERSONA_UNIT_SKIPPED:-n/a}, svc=${CLIENTE_PERSONA_UNIT_SERVICE_TESTS:-n/a}, sec=${CLIENTE_PERSONA_UNIT_SECURITY_TESTS:-n/a}, repo=${CLIENTE_PERSONA_UNIT_REPOSITORY_TESTS:-n/a}, api=${CLIENTE_PERSONA_UNIT_INTEGRATION_TESTS:-n/a}, err=${CLIENTE_PERSONA_UNIT_ERROR_TESTS:-n/a}, other=${CLIENTE_PERSONA_UNIT_OTHER_TESTS:-n/a} |"
-            echo "| cliente-persona | Karate contracts | $(status_label "${CLIENTE_PERSONA_KARATE_RESULT}") | features=${CLIENTE_PERSONA_KARATE_FEATURES:-n/a}, scenarios=${CLIENTE_PERSONA_KARATE_SCENARIOS:-n/a}, failed=${CLIENTE_PERSONA_KARATE_FAILED:-n/a} |"
-            echo "| cliente-persona | Gatling performance | $(status_label "${CLIENTE_PERSONA_GATLING_RESULT}") | requests=${CLIENTE_PERSONA_GATLING_REQUESTS:-n/a}, ko=${CLIENTE_PERSONA_GATLING_KO:-n/a}, p95=${CLIENTE_PERSONA_GATLING_P95:-n/a}ms, p99=${CLIENTE_PERSONA_GATLING_P99:-n/a}ms, throughput=${CLIENTE_PERSONA_GATLING_THROUGHPUT:-n/a}rps, failed assertions=${CLIENTE_PERSONA_GATLING_ASSERTIONS_FAILED:-n/a} |"
-            echo "| cliente-persona | Coverage quality gate | $(status_label "${CLIENTE_PERSONA_COVERAGE_RESULT}") | line coverage=${CLIENTE_PERSONA_COVERAGE_PCT:-n/a}%, threshold=${CLIENTE_PERSONA_COVERAGE_THRESHOLD_PCT:-n/a}%, covered=${CLIENTE_PERSONA_COVERAGE_COVERED_LINES:-n/a}, missed=${CLIENTE_PERSONA_COVERAGE_MISSED_LINES:-n/a} |"
-            echo "| cuenta-movimiento | Unit and integration | $(status_label "${CUENTA_MOVIMIENTO_UNIT_RESULT}") | tests=${CUENTA_MOVIMIENTO_UNIT_TESTS_RUN:-n/a}, failures=${CUENTA_MOVIMIENTO_UNIT_FAILURES:-n/a}, errors=${CUENTA_MOVIMIENTO_UNIT_ERRORS:-n/a}, skipped=${CUENTA_MOVIMIENTO_UNIT_SKIPPED:-n/a}, svc=${CUENTA_MOVIMIENTO_UNIT_SERVICE_TESTS:-n/a}, sec=${CUENTA_MOVIMIENTO_UNIT_SECURITY_TESTS:-n/a}, repo=${CUENTA_MOVIMIENTO_UNIT_REPOSITORY_TESTS:-n/a}, api=${CUENTA_MOVIMIENTO_UNIT_INTEGRATION_TESTS:-n/a}, err=${CUENTA_MOVIMIENTO_UNIT_ERROR_TESTS:-n/a}, other=${CUENTA_MOVIMIENTO_UNIT_OTHER_TESTS:-n/a} |"
-            echo "| cuenta-movimiento | Karate contracts | $(status_label "${CUENTA_MOVIMIENTO_KARATE_RESULT}") | features=${CUENTA_MOVIMIENTO_KARATE_FEATURES:-n/a}, scenarios=${CUENTA_MOVIMIENTO_KARATE_SCENARIOS:-n/a}, failed=${CUENTA_MOVIMIENTO_KARATE_FAILED:-n/a} |"
-            echo "| cuenta-movimiento | Gatling performance | $(status_label "${CUENTA_MOVIMIENTO_GATLING_RESULT}") | requests=${CUENTA_MOVIMIENTO_GATLING_REQUESTS:-n/a}, ko=${CUENTA_MOVIMIENTO_GATLING_KO:-n/a}, p95=${CUENTA_MOVIMIENTO_GATLING_P95:-n/a}ms, p99=${CUENTA_MOVIMIENTO_GATLING_P99:-n/a}ms, throughput=${CUENTA_MOVIMIENTO_GATLING_THROUGHPUT:-n/a}rps, failed assertions=${CUENTA_MOVIMIENTO_GATLING_ASSERTIONS_FAILED:-n/a} |"
-            echo "| cuenta-movimiento | Coverage quality gate | $(status_label "${CUENTA_MOVIMIENTO_COVERAGE_RESULT}") | line coverage=${CUENTA_MOVIMIENTO_COVERAGE_PCT:-n/a}%, threshold=${CUENTA_MOVIMIENTO_COVERAGE_THRESHOLD_PCT:-n/a}%, covered=${CUENTA_MOVIMIENTO_COVERAGE_COVERED_LINES:-n/a}, missed=${CUENTA_MOVIMIENTO_COVERAGE_MISSED_LINES:-n/a} |"
+            echo "| client-person | Unit and integration | $(status_label "${CLIENT_PERSON_UNIT_RESULT}") | tests=${CLIENT_PERSON_UNIT_TESTS_RUN:-n/a}, failures=${CLIENT_PERSON_UNIT_FAILURES:-n/a}, errors=${CLIENT_PERSON_UNIT_ERRORS:-n/a}, skipped=${CLIENT_PERSON_UNIT_SKIPPED:-n/a}, svc=${CLIENT_PERSON_UNIT_SERVICE_TESTS:-n/a}, sec=${CLIENT_PERSON_UNIT_SECURITY_TESTS:-n/a}, repo=${CLIENT_PERSON_UNIT_REPOSITORY_TESTS:-n/a}, api=${CLIENT_PERSON_UNIT_INTEGRATION_TESTS:-n/a}, err=${CLIENT_PERSON_UNIT_ERROR_TESTS:-n/a}, other=${CLIENT_PERSON_UNIT_OTHER_TESTS:-n/a} |"
+            echo "| client-person | Karate contracts | $(status_label "${CLIENT_PERSON_KARATE_RESULT}") | features=${CLIENT_PERSON_KARATE_FEATURES:-n/a}, scenarios=${CLIENT_PERSON_KARATE_SCENARIOS:-n/a}, failed=${CLIENT_PERSON_KARATE_FAILED:-n/a} |"
+            echo "| client-person | Gatling performance | $(status_label "${CLIENT_PERSON_GATLING_RESULT}") | requests=${CLIENT_PERSON_GATLING_REQUESTS:-n/a}, ko=${CLIENT_PERSON_GATLING_KO:-n/a}, p95=${CLIENT_PERSON_GATLING_P95:-n/a}ms, p99=${CLIENT_PERSON_GATLING_P99:-n/a}ms, throughput=${CLIENT_PERSON_GATLING_THROUGHPUT:-n/a}rps, failed assertions=${CLIENT_PERSON_GATLING_ASSERTIONS_FAILED:-n/a} |"
+            echo "| client-person | Coverage quality gate | $(status_label "${CLIENT_PERSON_COVERAGE_RESULT}") | line coverage=${CLIENT_PERSON_COVERAGE_PCT:-n/a}%, threshold=${CLIENT_PERSON_COVERAGE_THRESHOLD_PCT:-n/a}%, covered=${CLIENT_PERSON_COVERAGE_COVERED_LINES:-n/a}, missed=${CLIENT_PERSON_COVERAGE_MISSED_LINES:-n/a} |"
+            echo "| account-transaction | Unit and integration | $(status_label "${ACCOUNT_TRANSACTION_UNIT_RESULT}") | tests=${ACCOUNT_TRANSACTION_UNIT_TESTS_RUN:-n/a}, failures=${ACCOUNT_TRANSACTION_UNIT_FAILURES:-n/a}, errors=${ACCOUNT_TRANSACTION_UNIT_ERRORS:-n/a}, skipped=${ACCOUNT_TRANSACTION_UNIT_SKIPPED:-n/a}, svc=${ACCOUNT_TRANSACTION_UNIT_SERVICE_TESTS:-n/a}, sec=${ACCOUNT_TRANSACTION_UNIT_SECURITY_TESTS:-n/a}, repo=${ACCOUNT_TRANSACTION_UNIT_REPOSITORY_TESTS:-n/a}, api=${ACCOUNT_TRANSACTION_UNIT_INTEGRATION_TESTS:-n/a}, err=${ACCOUNT_TRANSACTION_UNIT_ERROR_TESTS:-n/a}, other=${ACCOUNT_TRANSACTION_UNIT_OTHER_TESTS:-n/a} |"
+            echo "| account-transaction | Karate contracts | $(status_label "${ACCOUNT_TRANSACTION_KARATE_RESULT}") | features=${ACCOUNT_TRANSACTION_KARATE_FEATURES:-n/a}, scenarios=${ACCOUNT_TRANSACTION_KARATE_SCENARIOS:-n/a}, failed=${ACCOUNT_TRANSACTION_KARATE_FAILED:-n/a} |"
+            echo "| account-transaction | Gatling performance | $(status_label "${ACCOUNT_TRANSACTION_GATLING_RESULT}") | requests=${ACCOUNT_TRANSACTION_GATLING_REQUESTS:-n/a}, ko=${ACCOUNT_TRANSACTION_GATLING_KO:-n/a}, p95=${ACCOUNT_TRANSACTION_GATLING_P95:-n/a}ms, p99=${ACCOUNT_TRANSACTION_GATLING_P99:-n/a}ms, throughput=${ACCOUNT_TRANSACTION_GATLING_THROUGHPUT:-n/a}rps, failed assertions=${ACCOUNT_TRANSACTION_GATLING_ASSERTIONS_FAILED:-n/a} |"
+            echo "| account-transaction | Coverage quality gate | $(status_label "${ACCOUNT_TRANSACTION_COVERAGE_RESULT}") | line coverage=${ACCOUNT_TRANSACTION_COVERAGE_PCT:-n/a}%, threshold=${ACCOUNT_TRANSACTION_COVERAGE_THRESHOLD_PCT:-n/a}%, covered=${ACCOUNT_TRANSACTION_COVERAGE_COVERED_LINES:-n/a}, missed=${ACCOUNT_TRANSACTION_COVERAGE_MISSED_LINES:-n/a} |"
             echo ""
             echo "Artifacts:"
-            echo "- \`cliente-persona-unit-test-report\`"
-            echo "- \`cliente-persona-karate-report\`"
-            echo "- \`cliente-persona-gatling-report\`"
-            echo "- \`cliente-persona-coverage-report\`"
-            echo "- \`cuenta-movimiento-unit-test-report\`"
-            echo "- \`cuenta-movimiento-karate-report\`"
-            echo "- \`cuenta-movimiento-gatling-report\`"
-            echo "- \`cuenta-movimiento-coverage-report\`"
+            echo "- \`client-person-unit-test-report\`"
+            echo "- \`client-person-karate-report\`"
+            echo "- \`client-person-gatling-report\`"
+            echo "- \`client-person-coverage-report\`"
+            echo "- \`account-transaction-unit-test-report\`"
+            echo "- \`account-transaction-karate-report\`"
+            echo "- \`account-transaction-gatling-report\`"
+            echo "- \`account-transaction-coverage-report\`"
           } >> "$GITHUB_STEP_SUMMARY"

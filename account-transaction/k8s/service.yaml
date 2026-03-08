@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: account-transaction-backend
+  name: account-transaction-backend-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: account-transaction-backend
+  type: LoadBalancer

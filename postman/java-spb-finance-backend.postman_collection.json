@@ -18,10 +18,6 @@
       "value": "11111111-1111-1111-1111-111111111111"
     },
     {
-      "key": "personId",
-      "value": "11111111-1111-1111-1111-111111111111"
-    },
-    {
       "key": "accountId",
       "value": "22222222-2222-2222-2222-222222222222"
     },
@@ -49,7 +45,6 @@
                   "const json = pm.response.json();",
                   "if (json.id) {",
                   "  pm.collectionVariables.set('clientId', json.id);",
-                  "  pm.collectionVariables.set('personId', json.id);",
                   "}"
                 ]
               }
@@ -65,7 +60,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"clienteid\": \"jose-lema\",\n  \"contrasena\": \"Secret123\",\n  \"genero\": \"Masculino\",\n  \"edad\": 54,\n  \"identificacion\": \"jose.lema@example.com\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"estado\": \"Activo\"\n}",
+              "raw": "{\n  \"name\": \"John Carter\",\n  \"clientId\": \"john-carter\",\n  \"password\": \"Secret123\",\n  \"gender\": \"Male\",\n  \"age\": 54,\n  \"identifier\": \"john.carter@example.com\",\n  \"address\": \"742 Main Street\",\n  \"phoneNumber\": \"098254785\",\n  \"status\": \"ACTIVE\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -106,7 +101,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Jose Lema Actualizado\",\n  \"clienteid\": \"jose-lema-updated\",\n  \"contrasena\": \"Updated123\",\n  \"genero\": \"Masculino\",\n  \"edad\": 55,\n  \"identificacion\": \"jose.lema.updated@example.com\",\n  \"direccion\": \"Otavalo sn y principal 123\",\n  \"telefono\": \"099999999\",\n  \"estado\": \"Activo\",\n  \"fecha_creacion\": \"2026-03-08T00:00:00.000Z\"\n}",
+              "raw": "{\n  \"name\": \"John Carter Updated\",\n  \"clientId\": \"john-carter-updated\",\n  \"password\": \"Updated123\",\n  \"gender\": \"Male\",\n  \"age\": 55,\n  \"identifier\": \"john.carter.updated@example.com\",\n  \"address\": \"742 Main Street Suite 123\",\n  \"phoneNumber\": \"099999999\",\n  \"status\": \"ACTIVE\",\n  \"createdAt\": \"2026-03-08T00:00:00.000Z\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -141,7 +136,7 @@
                 "exec": [
                   "const json = pm.response.json();",
                   "if (json.id) { pm.collectionVariables.set('accountId', json.id); }",
-                  "if (json.numerocuenta) { pm.collectionVariables.set('accountNumber', json.numerocuenta); }"
+                  "if (json.accountNumber) { pm.collectionVariables.set('accountNumber', json.accountNumber); }"
                 ]
               }
             }
@@ -156,14 +151,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numero\": \"{{accountNumber}}\",\n  \"saldoinicial\": 1000.0,\n  \"estado\": true,\n  \"tipo\": \"Ahorro\",\n  \"persona\": \"{{personId}}\"\n}",
+              "raw": "{\n  \"accountNumber\": \"{{accountNumber}}\",\n  \"initialBalance\": 1000.0,\n  \"status\": true,\n  \"accountType\": \"SAVINGS\",\n  \"clientId\": \"{{clientId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{accountBaseUrl}}/api/cuentas"
+            "url": "{{accountBaseUrl}}/api/accounts"
           },
           "response": []
         },
@@ -172,7 +167,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{accountBaseUrl}}/api/cuentas"
+            "url": "{{accountBaseUrl}}/api/accounts"
           },
           "response": []
         },
@@ -181,7 +176,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{accountBaseUrl}}/api/cuentas/{{accountId}}"
+            "url": "{{accountBaseUrl}}/api/accounts/{{accountId}}"
           },
           "response": []
         }
@@ -202,14 +197,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tipo\": \"Ahorro\",\n  \"numerocuenta\": \"{{accountNumber}}\",\n  \"valormovimiento\": 250.0,\n  \"estado\": true\n}",
+              "raw": "{\n  \"transactionType\": \"SAVINGS\",\n  \"accountNumber\": \"{{accountNumber}}\",\n  \"transactionValue\": 250.0,\n  \"status\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{accountBaseUrl}}/api/movimientos"
+            "url": "{{accountBaseUrl}}/api/movements"
           },
           "response": []
         },
@@ -225,14 +220,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tipo\": \"Ahorro\",\n  \"numerocuenta\": \"{{accountNumber}}\",\n  \"valormovimiento\": -120.0,\n  \"estado\": true\n}",
+              "raw": "{\n  \"transactionType\": \"SAVINGS\",\n  \"accountNumber\": \"{{accountNumber}}\",\n  \"transactionValue\": -120.0,\n  \"status\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "url": "{{accountBaseUrl}}/api/movimientos"
+            "url": "{{accountBaseUrl}}/api/movements"
           },
           "response": []
         },
@@ -241,7 +236,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{accountBaseUrl}}/api/movimientos"
+            "url": "{{accountBaseUrl}}/api/movements"
           },
           "response": []
         }
@@ -255,7 +250,7 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{accountBaseUrl}}/api/reports?fecha={{reportDate}}&cliente={{personId}}"
+            "url": "{{accountBaseUrl}}/api/reports?date={{reportDate}}&clientId={{clientId}}"
           },
           "response": []
         }

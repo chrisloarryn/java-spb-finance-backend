@@ -1,84 +1,84 @@
 # Java Spring Boot Finance Backend
 
-Repositorio con dos servicios Spring Boot para la prueba de clientes, cuentas, movimientos y reportes financieros.
+Repository with two Spring Boot services for clients, accounts, movements, and financial reports.
 
-## Servicios
+## Services
 
-| Servicio | Puerto | Swagger | Endpoints principales |
+| Service | Port | Swagger | Main endpoints |
 | --- | --- | --- | --- |
-| `cliente-persona` | `1203` | `http://localhost:1203/swagger-ui/index.html` | `/api/clients` |
-| `cuenta-movimiento` | `1204` | `http://localhost:1204/swagger-ui/index.html` | `/api/cuentas`, `/api/movimientos`, `/api/reports` |
+| `client-person` | `1203` | `http://localhost:1203/swagger-ui/index.html` | `/api/clients` |
+| `account-transaction` | `1204` | `http://localhost:1204/swagger-ui/index.html` | `/api/accounts`, `/api/movements`, `/api/reports` |
 
-## Stack actual
+## Current stack
 
 - Java `25`
 - Spring Boot `4.0.3`
-- Maven Wrapper por módulo
-- PostgreSQL en Docker
-- H2 para tests
-- Karate, Gatling y JaCoCo
-- Workflow de validación en [`.github/workflows/validate.yml`](.github/workflows/validate.yml)
+- Maven Wrapper per module
+- PostgreSQL in Docker
+- H2 for tests
+- Karate, Gatling, and JaCoCo
+- Validation workflow in [`.github/workflows/validate.yml`](.github/workflows/validate.yml)
 
-## Estructura
+## Structure
 
-- [`cliente-persona/`](cliente-persona): servicio de clientes/personas
-- [`cuenta-movimiento/`](cuenta-movimiento): servicio de cuentas, movimientos y reportes
-- [`BD_SCRIPTS/`](BD_SCRIPTS): scripts iniciales de base de datos
-- [`postman/`](postman): colección agregada del sistema
+- [`client-person/`](client-person): client and person service
+- [`account-transaction/`](account-transaction): account, movement, and report service
+- [`DB_SCRIPTS/`](DB_SCRIPTS): database bootstrap scripts
+- [`postman/`](postman): aggregated API collection
 
-## Levantar todo con Docker
+## Start everything with Docker
 
-Los scripts de [`BD_SCRIPTS/`](BD_SCRIPTS) se cargan automáticamente cuando inicia PostgreSQL.
+The scripts in [`DB_SCRIPTS/`](DB_SCRIPTS) are loaded automatically when PostgreSQL starts.
 
 ```bash
 docker compose up --build
 ```
 
-Servicios disponibles:
+Available services:
 
 - PostgreSQL: `localhost:65432`
-- `cliente-persona`: `http://localhost:1203`
-- `cuenta-movimiento`: `http://localhost:1204`
+- `client-person`: `http://localhost:1203`
+- `account-transaction`: `http://localhost:1204`
 
-## Ejecutar localmente con Java 25
+## Run locally with Java 25
 
-1. Levanta PostgreSQL:
+1. Start PostgreSQL:
 
 ```bash
 docker compose up -d postgres
 ```
 
-2. Activa Java 25 con SDKMAN:
+2. Activate Java 25 with SDKMAN:
 
 ```bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk use java 25.0.2-tem
 ```
 
-3. Ejecuta `cliente-persona`:
+3. Run `client-person`:
 
 ```bash
-cd cliente-persona
+cd client-person
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:65432/postgres \
 SPRING_DATASOURCE_USERNAME=postgres \
 SPRING_DATASOURCE_PASSWORD=postgres \
 ./mvnw spring-boot:run
 ```
 
-4. En otra terminal, ejecuta `cuenta-movimiento`:
+4. In another terminal, run `account-transaction`:
 
 ```bash
-cd cuenta-movimiento
+cd account-transaction
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:65432/postgres \
 SPRING_DATASOURCE_USERNAME=postgres \
 SPRING_DATASOURCE_PASSWORD=postgres \
-CLIENT_PERSONA_BASE_URL=http://localhost:1203 \
+CLIENT_PERSON_BASE_URL=http://localhost:1203 \
 ./mvnw spring-boot:run
 ```
 
-## Validación local
+## Local validation
 
-Ejecuta estos comandos dentro de cada módulo:
+Run these commands inside each module:
 
 ```bash
 ./mvnw clean test -DexcludedGroups=karate
@@ -89,10 +89,10 @@ Ejecuta estos comandos dentro de cada módulo:
 
 ## Postman
 
-Colecciones actualizadas:
+Updated collections:
 
 - [`postman/java-spb-finance-backend.postman_collection.json`](postman/java-spb-finance-backend.postman_collection.json)
-- [`cliente-persona/postman/cliente-persona.postman_collection.json`](cliente-persona/postman/cliente-persona.postman_collection.json)
-- [`cuenta-movimiento/postman/cuenta-movimiento.postman_collection.json`](cuenta-movimiento/postman/cuenta-movimiento.postman_collection.json)
+- [`client-person/postman/client-person.postman_collection.json`](client-person/postman/client-person.postman_collection.json)
+- [`account-transaction/postman/account-transaction.postman_collection.json`](account-transaction/postman/account-transaction.postman_collection.json)
 
-La colección raíz usa variables para `clientBaseUrl`, `accountBaseUrl`, `clientId`, `personId`, `accountId`, `accountNumber` y `reportDate`.
+The root collection uses `clientBaseUrl`, `accountBaseUrl`, `clientId`, `accountId`, `accountNumber`, and `reportDate`.

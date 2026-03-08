@@ -1,0 +1,104 @@
+{
+  "info": {
+    "_postman_id": "2f0f7ca8-86b2-4b0b-971d-c4f8a2f4b8f7",
+    "name": "Client Person",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1203"
+    },
+    {
+      "key": "clientId",
+      "value": "11111111-1111-1111-1111-111111111111"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Client",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.id) { pm.collectionVariables.set('clientId', json.id); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mary Sutton\",\n  \"clientId\": \"mary-sutton\",\n  \"password\": \"Secret123\",\n  \"gender\": \"Female\",\n  \"age\": 45,\n  \"identifier\": \"mary.sutton@example.com\",\n  \"address\": \"915 Liberty Avenue\",\n  \"phoneNumber\": \"097548965\",\n  \"status\": \"ACTIVE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/clients"
+      },
+      "response": []
+    },
+    {
+      "name": "List Clients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/clients"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Client By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/clients/{{clientId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Client",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Mary Sutton Updated\",\n  \"clientId\": \"mary-sutton-updated\",\n  \"password\": \"Updated123\",\n  \"gender\": \"Female\",\n  \"age\": 46,\n  \"identifier\": \"mary.sutton.updated@example.com\",\n  \"address\": \"915 Liberty Avenue Suite 123\",\n  \"phoneNumber\": \"097548966\",\n  \"status\": \"ACTIVE\",\n  \"createdAt\": \"2026-03-08T00:00:00.000Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/clients/{{clientId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Client",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/clients/{{clientId}}"
+      },
+      "response": []
+    }
+  ]
+}
