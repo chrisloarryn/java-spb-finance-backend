@@ -1,116 +1,81 @@
 package accounttransaction.api.controllers;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.webjars.NotFoundException;
+import java.util.List;
+import java.util.UUID;
 
-import accounttransaction.api.controllers.AccountController;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import accounttransaction.business.abstracts.AccountService;
 import accounttransaction.business.dto.requests.create.CreateAccountRequest;
 import accounttransaction.business.dto.requests.update.UpdateAccountRequest;
 import accounttransaction.business.dto.responses.create.CreateAccountResponse;
-import accounttransaction.business.dto.responses.get.GetAllAccountsResponse;
 import accounttransaction.business.dto.responses.get.GetAccountResponse;
+import accounttransaction.business.dto.responses.get.GetAllAccountsResponse;
 import accounttransaction.business.dto.responses.update.UpdateAccountResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-
-public class AccountControllerTests {
-
-    private AccountController todoController;
+@ExtendWith(MockitoExtension.class)
+class AccountControllerTests {
 
     @Mock
-    private AccountService todoService;
+    private AccountService service;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        todoController = new AccountController(todoService);
+    @InjectMocks
+    private AccountController controller;
+
+    @Test
+    void getAllDelegatesToTheService() {
+        List<GetAllAccountsResponse> response = List.of(new GetAllAccountsResponse());
+        when(service.getAll()).thenReturn(response);
+
+        assertSame(response, controller.getAll());
+        verify(service).getAll();
     }
 
     @Test
-    public void testGetAll() {
-        List<GetAllAccountsResponse> todos = new ArrayList<>();
-        given(todoService.getAll()).willReturn(todos);
+    void getByIdDelegatesToTheService() {
+        UUID accountId = UUID.randomUUID();
+        GetAccountResponse response = new GetAccountResponse();
+        when(service.getById(accountId)).thenReturn(response);
 
-        List<GetAllAccountsResponse> result = todoController.getAll();
-
-        assertEquals(todos, result);
+        assertSame(response, controller.getById(accountId));
+        verify(service).getById(accountId);
     }
 
     @Test
-    public void testGetById() {
-        UUID id = UUID.randomUUID();
-        GetAccountResponse todoResponse = new GetAccountResponse();
-        given(todoService.getById(id)).willReturn(todoResponse);
-
-        GetAccountResponse result = todoController.getById(id);
-
-        assertEquals(todoResponse, result);
-    }
-
-    @Test
-    public void testAdd() throws InterruptedException {
+    void addDelegatesToTheService() {
         CreateAccountRequest request = new CreateAccountRequest();
         CreateAccountResponse response = new CreateAccountResponse();
-        given(todoService.add(request)).willReturn(response);
+        when(service.add(request)).thenReturn(response);
 
-        CreateAccountResponse result = todoController.add(request);
-
-        assertEquals(response, result);
-
-        // Verify that the service method was called
-        verify(todoService, times(1)).add(request);
-
-        // Verify that the service method was called with the correct argument
-        verify(todoService, times(1)).add(request);
-
-        // Verify that the service method was not called with the wrong argument
-        verify(todoService, never()).add(null);
-
-        // Verify that the service method was called with the correct argument only once
-        verify(todoService, times(1)).add(request);
+        assertSame(response, controller.add(request));
+        verify(service).add(request);
     }
 
     @Test
-    public void shouldUpdate() {
-        UUID id = UUID.randomUUID();
+    void updateDelegatesToTheService() {
+        UUID accountId = UUID.randomUUID();
         UpdateAccountRequest request = new UpdateAccountRequest();
         UpdateAccountResponse response = new UpdateAccountResponse();
-        given(todoService.update(id, request)).willReturn(response);
+        when(service.update(accountId, request)).thenReturn(response);
 
-        UpdateAccountResponse result = todoController.update(id, request);
-
-        assertEquals(response, result);
-
-        // Verify that the service method was called
-        verify(todoService, times(1)).update(id, request);
-
-        // Verify that the service method was called with the correct argument
-        verify(todoService, times(1)).update(id, request);
-
+        assertSame(response, controller.update(accountId, request));
+        verify(service).update(accountId, request);
     }
 
     @Test
-    public void shouldDelete() {
-        UUID id = UUID.randomUUID();
-        doNothing().when(todoService).delete(id);
+    void deleteDelegatesToTheService() {
+        UUID accountId = UUID.randomUUID();
 
-        todoController.delete(id);
+        controller.delete(accountId);
 
-        // Verify that the service method was called
-        verify(todoService, times(1)).delete(id);
-
-        // Verify that the service method was called with the correct argument
-        verify(todoService, times(1)).delete(id);
+        verify(service).delete(accountId);
     }
 }

@@ -10,9 +10,8 @@ import personclient.business.dto.responses.get.GetAllClientsResponse;
 import personclient.business.dto.responses.get.GetClientResponse;
 import personclient.business.dto.responses.update.UpdateClientResponse;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -58,6 +58,7 @@ public class AccountManager implements AccountService {
     public CreateAccountResponse add(CreateAccountRequest todoRequest) {
         try {
             var todo = mapper.forRequest().map(todoRequest, Account.class);
+            todo.setId(null);
             var createdTodo = repo.save(todo);
             return mapper.forResponse().map(createdTodo, CreateAccountResponse.class);
         } catch (BadRequestException e) {

@@ -7,9 +7,9 @@ import personclient.entities.Person;
 import personclient.entities.enums.Priority;
 import personclient.entities.enums.State;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 @Getter

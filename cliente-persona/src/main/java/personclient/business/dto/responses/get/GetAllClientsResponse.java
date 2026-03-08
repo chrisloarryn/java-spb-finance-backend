@@ -14,7 +14,7 @@ import personclient.entities.enums.State;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.UUID;
 

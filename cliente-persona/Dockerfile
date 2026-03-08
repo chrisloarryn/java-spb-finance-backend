@@ -1,5 +1,5 @@
 # Etapa de construcción
-FROM maven:3-eclipse-temurin-21-alpine AS build
+FROM maven:3-eclipse-temurin-25-alpine AS build
 WORKDIR /app
 
 COPY src ./src
@@ -12,7 +12,7 @@ RUN mvn clean package -B
 RUN ls -la /app/target
 
 # Etapa de ejecución
-FROM openjdk:18-slim
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar cp.jar
 

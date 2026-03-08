@@ -20,7 +20,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -52,12 +53,12 @@ public class Account implements Serializable {
     private Boolean status;
 
     @JsonProperty("tipo")
-    @NotEmpty(message = "Tipo is required")
+    @NotNull(message = "Tipo is required")
     @Column(name = "account_type", nullable = false)
     private AccountType accountType = AccountType.Ahorro;
 
     @JsonProperty("persona")
-    @NotEmpty(message = "Persona is required")
+    @NotNull(message = "Persona is required")
     @Column(name = "person_id", nullable = false, unique = false, updatable = true)
     private UUID personId = UUID.fromString("40b1bdca-6fbc-4bc7-8462-9e6bf24a877f"); // 40b1bdca-6fbc-4bc7-8462-9e6bf24a877f
 

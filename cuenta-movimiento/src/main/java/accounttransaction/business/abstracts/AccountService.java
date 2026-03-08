@@ -10,7 +10,7 @@ import accounttransaction.business.dto.responses.get.GetAllAccountsResponse;
 import accounttransaction.business.dto.responses.get.GetAccountResponse;
 import accounttransaction.business.dto.responses.update.UpdateAccountResponse;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 

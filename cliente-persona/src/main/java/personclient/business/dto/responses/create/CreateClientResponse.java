@@ -12,7 +12,7 @@ import personclient.entities.enums.State;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.UUID;
 

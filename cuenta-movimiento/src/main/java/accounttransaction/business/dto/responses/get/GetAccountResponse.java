@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 @Setter
 @Getter

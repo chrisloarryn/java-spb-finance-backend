@@ -10,7 +10,7 @@ import personclient.business.dto.responses.get.GetAllClientsResponse;
 import personclient.business.dto.responses.get.GetClientResponse;
 import personclient.business.dto.responses.update.UpdateClientResponse;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
