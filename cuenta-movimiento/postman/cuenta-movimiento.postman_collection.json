@@ -1,0 +1,149 @@
+{
+  "info": {
+    "_postman_id": "f61a4cf3-7e44-44c3-b6ef-5db1d4b65fb3",
+    "name": "Cuenta Movimiento",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1204"
+    },
+    {
+      "key": "personId",
+      "value": "11111111-1111-1111-1111-111111111111"
+    },
+    {
+      "key": "accountId",
+      "value": "22222222-2222-2222-2222-222222222222"
+    },
+    {
+      "key": "accountNumber",
+      "value": "ACC-1001"
+    },
+    {
+      "key": "reportDate",
+      "value": "2026-03-08"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Account",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.id) { pm.collectionVariables.set('accountId', json.id); }",
+              "if (json.numerocuenta) { pm.collectionVariables.set('accountNumber', json.numerocuenta); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"numero\": \"{{accountNumber}}\",\n  \"saldoinicial\": 1000.0,\n  \"estado\": true,\n  \"tipo\": \"Ahorro\",\n  \"persona\": \"{{personId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/cuentas"
+      },
+      "response": []
+    },
+    {
+      "name": "List Accounts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/cuentas"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Account By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/cuentas/{{accountId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Deposit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"Ahorro\",\n  \"numerocuenta\": \"{{accountNumber}}\",\n  \"valormovimiento\": 300.0,\n  \"estado\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/movimientos"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Withdrawal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"Ahorro\",\n  \"numerocuenta\": \"{{accountNumber}}\",\n  \"valormovimiento\": -120.0,\n  \"estado\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/movimientos"
+      },
+      "response": []
+    },
+    {
+      "name": "List Movements",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/movimientos"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/reports?fecha={{reportDate}}&cliente={{personId}}"
+      },
+      "response": []
+    }
+  ]
+}

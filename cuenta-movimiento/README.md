@@ -1,36 +1,60 @@
-# Todo List Backend
+# Cuenta Movimiento Service
 
-## Description
+Servicio Spring Boot para cuentas, movimientos y reportes por cliente.
 
-Spring Boot backend for Todo List application.
+## Puerto y documentación
 
-## Installation
+- Puerto: `1204`
+- Swagger: `http://localhost:1204/swagger-ui/index.html`
+- Base paths:
+  - `/api/cuentas`
+  - `/api/movimientos`
+  - `/api/reports`
 
-```bash
-mvn clean install
-```
+## Dependencia externa
 
-## Usage
+El endpoint de reportes consulta `cliente-persona` mediante la propiedad `client.persona.base-url`.
 
-```bash
-mvn spring-boot:run
-```
-
-## Docker execution
-
-It provides a PostgreSQL database and the service. To run it, execute: 
+Ejemplo local:
 
 ```bash
-docker-compose up
+CLIENT_PERSONA_BASE_URL=http://localhost:1203
 ```
 
-## Swagger
+## Ejecutar localmente
 
-Swagger is available at: http://localhost:8080/swagger-ui/index.html
-
-
-## Executing karate tests
+Requiere Java `25`, PostgreSQL en `localhost:65432` y `cliente-persona` corriendo.
 
 ```bash
-mvn clean test -Dkarate.env="local" -Dkarate.options="--tags @clients" -Ddriver=karate > log.log -X
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk use java 25.0.2-tem
+
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:65432/postgres \
+SPRING_DATASOURCE_USERNAME=postgres \
+SPRING_DATASOURCE_PASSWORD=postgres \
+CLIENT_PERSONA_BASE_URL=http://localhost:1203 \
+./mvnw spring-boot:run
 ```
+
+## Ejecutar con Docker
+
+Desde la raíz del repo:
+
+```bash
+docker compose up --build cuenta-movimiento
+```
+
+## Validación
+
+```bash
+./mvnw clean test -DexcludedGroups=karate
+./mvnw -Dtest=karate.ApiContractsKarateTest test
+./mvnw -Pcoverage verify -DexcludedGroups=karate
+./mvnw -Pgatling verify -DskipTests=true
+```
+
+## Postman
+
+Colección del módulo:
+
+- [`postman/cuenta-movimiento.postman_collection.json`](postman/cuenta-movimiento.postman_collection.json)

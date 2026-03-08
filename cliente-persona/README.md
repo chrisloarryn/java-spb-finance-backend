@@ -1,36 +1,46 @@
-# Todo List Backend
+# Cliente Persona Service
 
-## Description
+Servicio Spring Boot para administración de clientes/personas.
 
-Spring Boot backend for Todo List application.
+## Puerto y documentación
 
-## Installation
+- Puerto: `1203`
+- Swagger: `http://localhost:1203/swagger-ui/index.html`
+- Base path: `/api/clients`
 
-```bash
-mvn clean install
-```
+## Ejecutar localmente
 
-## Usage
-
-```bash
-mvn spring-boot:run
-```
-
-## Docker execution
-
-It provides a PostgreSQL database and the service. To run it, execute: 
+Requiere Java `25` y PostgreSQL disponible en `localhost:65432`.
 
 ```bash
-docker-compose up
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk use java 25.0.2-tem
+
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:65432/postgres \
+SPRING_DATASOURCE_USERNAME=postgres \
+SPRING_DATASOURCE_PASSWORD=postgres \
+./mvnw spring-boot:run
 ```
 
-## Swagger
+## Ejecutar con Docker
 
-Swagger is available at: http://localhost:8080/swagger-ui/index.html
-
-
-## Executing karate tests
+Desde la raíz del repo:
 
 ```bash
-mvn clean test -Dkarate.env="local" -Dkarate.options="--tags @clients" -Ddriver=karate > log.log -X
+docker compose up --build cliente-persona
 ```
+
+## Validación
+
+```bash
+./mvnw clean test -DexcludedGroups=karate
+./mvnw -Dtest=karate.ApiContractsKarateTest test
+./mvnw -Pcoverage verify -DexcludedGroups=karate
+./mvnw -Pgatling verify -DskipTests=true
+```
+
+## Postman
+
+Colección del módulo:
+
+- [`postman/cliente-persona.postman_collection.json`](postman/cliente-persona.postman_collection.json)
