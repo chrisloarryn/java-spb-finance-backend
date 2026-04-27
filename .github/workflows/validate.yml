@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload client-person unit test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: client-person-unit-test-report
           path: |
@@ -121,7 +121,7 @@ jobs:
 
       - name: Upload client-person Karate report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: client-person-karate-report
           path: |
@@ -182,7 +182,7 @@ jobs:
 
       - name: Upload client-person Gatling report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: client-person-gatling-report
           path: |
@@ -238,7 +238,7 @@ jobs:
 
       - name: Upload client-person coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: client-person-coverage-report
           path: |
@@ -299,7 +299,7 @@ jobs:
 
       - name: Upload account-transaction unit test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: account-transaction-unit-test-report
           path: |
@@ -357,7 +357,7 @@ jobs:
 
       - name: Upload account-transaction Karate report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: account-transaction-karate-report
           path: |
@@ -418,7 +418,7 @@ jobs:
 
       - name: Upload account-transaction Gatling report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: account-transaction-gatling-report
           path: |
@@ -474,7 +474,7 @@ jobs:
 
       - name: Upload account-transaction coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: account-transaction-coverage-report
           path: |
